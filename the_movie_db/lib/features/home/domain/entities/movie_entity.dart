@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class Movie extends Equatable {
+class MovieEntity extends Equatable {
   final String? poster_path;
   final String? overview;
   final String? release_date;
-  final String id;
+  final int id;
   final String? original_title;
   final double? vote_average;
-  Movie(
+  MovieEntity(
       {required this.id,
       this.original_title,
       this.overview,
