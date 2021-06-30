@@ -140,6 +140,12 @@
       "languageVersion": "1.24"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///Users/napista/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "equatable",
       "rootUri": "file:///Users/napista/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3",
       "packageUri": "lib/",
@@ -184,6 +190,12 @@
     {
       "name": "glob",
       "rootUri": "file:///Users/napista/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/glob-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "http_parser",
+      "rootUri": "file:///Users/napista/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/http_parser-4.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -326,7 +338,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-06-30T12:15:22.205657Z",
+  "generated": "2021-06-30T16:41:34.681870Z",
   "generator": "pub",
   "generatorVersion": "2.13.3"
 }

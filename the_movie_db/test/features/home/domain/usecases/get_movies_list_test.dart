@@ -20,7 +20,7 @@ void main() {
   mockMovieRepository = MockMovieRepository();
   usecase = GetMovieList(mockMovieRepository);
   test('should get the movies list', () async {
-    final movies = MovieList();
+    final movies = MovieListEntity();
 
     when(mockMovieRepository.getMoviesList())
         .thenAnswer((realInvocation) async => Right(movies));

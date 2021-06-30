@@ -6,12 +6,12 @@ import 'package:the_movie_db/features/home/domain/entities/movie_entity.dart';
 import 'package:the_movie_db/features/home/domain/entities/movie_list_entity.dart';
 import 'package:the_movie_db/features/home/domain/repositories/Imovie_repository.dart';
 
-class GetMovieList implements UseCase<MovieList, NoParams> {
+class GetMovieList implements UseCase<MovieListEntity, NoParams> {
   final IMovieRepository repository;
   GetMovieList(this.repository);
 
   @override
-  Future<Either<Failure, MovieList>> call(NoParams noParams) async {
+  Future<Either<Failure, MovieListEntity>> call(NoParams noParams) async {
     return await repository.getMoviesList();
   }
 }

@@ -1,18 +1,19 @@
 // @dart=2.9
+import 'package:connectivity/connectivity.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:the_movie_db/core/error/exceptions.dart';
 import 'package:the_movie_db/core/error/failures.dart';
 import 'package:the_movie_db/core/network/network_info.dart';
-import 'package:the_movie_db/features/home/data/datasources/IMovie_Remote_Data_Source.dart';
+import 'package:the_movie_db/features/home/data/datasources/Movie_Remote_Data_Source.dart';
 import 'package:the_movie_db/features/home/data/models/movie_model.dart';
 import 'package:the_movie_db/features/home/data/repositories/movie_repository.dart';
 import 'package:the_movie_db/features/home/domain/entities/movie_list_entity.dart';
 
 class MockRemoteDataSource extends Mock implements IMovieRemoteDataSource {}
 
-class MockNetworkInfo extends Mock implements NetworkInfo {}
+class MockNetworkInfo extends Mock implements INetworkInfo {}
 
 void main() {
   MovieRepository repository;
@@ -37,17 +38,19 @@ void main() {
         release_date: "2016-08-03",
         original_title: "Suicide Squad",
         vote_average: 5.91);
-    final tmovies = MovieList(movieList: [tMovieModel]);
+    final tmovies = MovieListEntity(movieList: [tMovieModel]);
 
     test('should check if the device is online', () async {
-      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(mockNetworkInfo.isConnected)
+          .thenAnswer((_) async => ConnectivityResult.wifi);
       repository.getMoviesList();
       verify(mockNetworkInfo.isConnected);
     });
 
     group('device is online', () {
       setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+        when(mockNetworkInfo.isConnected)
+            .thenAnswer((_) async => ConnectivityResult.wifi);
       });
       test('should return remote data when the call to remote data is fine',
           () async {
@@ -67,12 +70,6 @@ void main() {
         final result = await repository.getMoviesList();
         verify(mockRemoteDataSource.getMoviesList());
         expect(result, equals(Left(ServerFailure())));
-      });
-    });
-
-    group('device is offline', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
       });
     });
   });
