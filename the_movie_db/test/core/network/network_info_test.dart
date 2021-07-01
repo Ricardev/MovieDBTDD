@@ -20,7 +20,7 @@ void main() {
     test('should succeed', () async {
       when(connectivity.checkConnectivity())
           .thenAnswer((_) async => ConnectivityResult.wifi);
-      final result = mockWifi;
+      final result = await connectivity.checkConnectivity();
       verify(connectivity.checkConnectivity());
       expect(result, ConnectivityResult.wifi);
     });

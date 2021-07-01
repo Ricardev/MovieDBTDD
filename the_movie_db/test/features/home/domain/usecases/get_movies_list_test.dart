@@ -11,14 +11,14 @@ import 'package:the_movie_db/features/home/domain/usecases/get_movie_list.dart';
 class MockMovieRepository extends Mock implements IMovieRepository {}
 
 void main() {
-  GetMovieList usecase;
+  GetMovieListUseCase usecase;
   MockMovieRepository mockMovieRepository;
   setUp(() {
     mockMovieRepository = MockMovieRepository();
-    usecase = GetMovieList(mockMovieRepository);
+    usecase = GetMovieListUseCase(mockMovieRepository);
   });
   mockMovieRepository = MockMovieRepository();
-  usecase = GetMovieList(mockMovieRepository);
+  usecase = GetMovieListUseCase(mockMovieRepository);
   test('should get the movies list', () async {
     final movies = MovieListEntity();
 

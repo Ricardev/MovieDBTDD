@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:the_movie_db/core/error/failures.dart';
 import 'package:the_movie_db/features/home/data/models/movie_list_model.dart';
 import 'package:the_movie_db/features/home/domain/entities/movie_list_entity.dart';
 
