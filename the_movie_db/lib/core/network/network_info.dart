@@ -5,8 +5,12 @@ abstract class INetworkInfo {
 }
 
 class NetworkInfo implements INetworkInfo {
-  final Connectivity connectivity;
-  NetworkInfo({required this.connectivity});
+  NetworkInfo();
+
+  late Connectivity connectivity = Connectivity();
+
+  setConnectivity(Connectivity param) => param = connectivity;
+
   @override
   Future<ConnectivityResult> get isConnected =>
       connectivity.checkConnectivity();

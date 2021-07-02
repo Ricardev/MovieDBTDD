@@ -3,15 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
-import 'package:the_movie_db/core/network/network_info.dart';
-import 'package:the_movie_db/features/home/data/datasources/Movie_Remote_Data_Source.dart';
-import 'package:the_movie_db/features/home/data/repositories/movie_repository.dart';
-import 'package:the_movie_db/features/home/domain/entities/movie_list_entity.dart';
-import 'package:the_movie_db/features/home/domain/repositories/Imovie_repository.dart';
+import 'package:the_movie_db/core/states/application_states.dart';
 import 'package:the_movie_db/features/home/domain/usecases/get_movie_list.dart';
 import 'package:the_movie_db/features/home/presentation/bloc/movie_list_bloc.dart';
-import 'package:the_movie_db/features/home/presentation/bloc/movie_list_state.dart';
 import 'package:the_movie_db/injection/injection_container.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,28 +16,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late IMovieRepository movieRepository;
-  late GetMovieListUseCase movieListUseCase;
-  late MovieListBloc movieListBloc;
-  late INetworkInfo networkInfo;
-  late IMovieRemoteDataSource movieRemoteDataSource;
+  late final MovieListBloc movieListBloc;
   late Connectivity connectivity;
   late Dio dio;
+
   @override
   void initState() {
     connectivity = Connectivity();
     dio = Dio();
     final movieListUseCase = injector.get<GetMovieListUseCase>();
-    injector.get<IMovieRepository>();
-    injector.get<INetworkInfo>();
-    injector.get<IMovieRemoteDataSource>();
-    movieListBloc = injector.get<MovieListBloc>();
     movieListBloc = MovieListBloc(
         getMovieListUseCase: movieListUseCase,
-        initialState: Empty(),
-        movieList: MovieListEntity());
-
+        movieListState: MovieListState.Empty,
+        movieList: []);
     movieListBloc.getMovieListUseCase(NoParams());
+    movieListBloc.getMovieList();
     super.initState();
   }
 
@@ -54,47 +41,51 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           title: Text('Home Page'),
         ),
-        body: buildBody());
+        body: buildBody(context, movieListBloc));
   }
 }
 
-BlocProvider<MovieListBloc> buildBody() {
+BlocProvider<MovieListBloc> buildBody(
+    BuildContext context, MovieListBloc movieListBloc) {
   return BlocProvider(
     create: (_) => injector<MovieListBloc>(),
     child: Observer(builder: (_) {
-      return Column(
-        children: [
-          BlocBuilder<MovieListBloc, MovieListState>(
-            builder: (context, state) {
-              if (state is Empty) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ));
-              } else if (state is Loading) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: Colors.blue,
-                ));
-              } else if (state is Loaded) {
-                return Expanded(
-                    child: GridView.builder(
-                        itemCount: BlocProvider.of<MovieListBloc>(context)
-                            .movieList
-                            .movieList
-                            ?.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
-                        itemBuilder: (context, index) {
-                          return Container();
-                        }));
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ],
-      );
+      if (movieListBloc.movieListState == MovieListState.Empty) {
+        return Center(
+            child: CircularProgressIndicator(
+          color: Colors.blue,
+        ));
+      } else if (movieListBloc.movieListState == MovieListState.Loading) {
+        return Center(
+            child: CircularProgressIndicator(
+          color: Colors.blue,
+        ));
+      } else if (movieListBloc.movieListState == MovieListState.Loaded) {
+        return BlocBuilder<MovieListBloc, MovieListState>(
+          builder: (context, state) {
+            return Padding(
+                padding: const EdgeInsets.only(left: 18.0, right: 18),
+                child: Observer(builder: (_) {
+                  return GridView.builder(
+                      itemCount: movieListBloc.movieList?.length ?? 0,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2),
+                      itemBuilder: (context, index) {
+                        return Observer(
+                            builder: (_) => Container(
+                                  height: 10,
+                                  width: 20,
+                                  child: Text(movieListBloc
+                                          .movieList?[index].original_title ??
+                                      'Sem título para este filme'),
+                                ));
+                      });
+                }));
+          },
+        );
+      } else {
+        return Container();
+      }
     }),
   );
 }

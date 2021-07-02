@@ -12,7 +12,7 @@ void main() {
   MockConnectivity connectivity;
   setUp(() {
     connectivity = MockConnectivity();
-    networkInfo = NetworkInfo(connectivity: connectivity);
+    networkInfo = NetworkInfo();
   });
 
   group('is connected', () {

@@ -23,6 +23,6 @@ class MovieModel extends MovieEntity {
         overview: json['overview'],
         original_title: json['original_title'],
         release_date: json['release_date'],
-        vote_average: json['vote_average']);
+        vote_average: json['vote_average'].toDouble());
   }
 }

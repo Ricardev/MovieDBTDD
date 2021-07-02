@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:the_movie_db/core/states/application_states.dart';
+import 'package:the_movie_db/features/home/domain/entities/movie_list_entity.dart';
 import 'package:the_movie_db/features/home/domain/usecases/get_movie_list.dart';
 import 'package:the_movie_db/features/home/presentation/bloc/movie_list_bloc.dart';
-import 'package:the_movie_db/features/home/presentation/bloc/movie_list_state.dart';
 
 class MockGetMoviesList extends Mock implements GetMovieListUseCase {}
 
@@ -12,11 +13,13 @@ void main() {
   setUp(() {
     mockGetMoviesList = MockGetMoviesList();
     bloc = MovieListBloc(
-        initialState: Empty(), getMovieListUseCase: mockGetMoviesList);
+        movieListState: MovieListState.Empty,
+        getMovieListUseCase: mockGetMoviesList,
+        movieList: []);
   });
 
   test('initial data should be Empty', () async {
-    expect(bloc.initialState, equals(Empty()));
+    expect(bloc.initialState, equals(MovieListState.Empty));
   });
 
   group('get MoviesList', () {});
