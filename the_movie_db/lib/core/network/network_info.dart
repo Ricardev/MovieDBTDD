@@ -8,7 +8,6 @@ class NetworkInfo implements INetworkInfo {
   final Connectivity connectivity;
   NetworkInfo({required this.connectivity});
   @override
-  // TODO: implement isConnected
   Future<ConnectivityResult> get isConnected =>
       connectivity.checkConnectivity();
 }
